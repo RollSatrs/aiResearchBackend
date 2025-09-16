@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id        String    @id @default(uuid())
+    email     String    @unique
+    password  String
+    name      String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    summaries Summary[]
+}
+
+model PaperCache {
+    id         String   @id @default(uuid())
+    externalId String   @unique // ID из Semantic Scholar / arXiv
+    source     String // "semantic_scholar" | "arxiv" | "pubmed"
+    title      String
+    authors    String // csv или json в текстовом поле
+    abstract   String?
+    url        String?
+    year       Int?
+    rawJson    Json
+    createdAt  DateTime @default(now())
+}
+
+model Summary {
+    id        String   @id @default(uuid())
+    userId    String
+    paperId   String? // можно связать с PaperCache
+    source    String // источник текста ("abstract|fulltext|url")
+    inputHash String   @unique // дедуп одинаковых запросов
+    summary   String
+    keyIdeas  String? // json как строка
+    createdAt DateTime @default(now())
+    user      User     @relation(fields: [userId], references: [id])
+}

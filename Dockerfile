@@ -8,7 +8,7 @@ WORKDIR /app
 FROM base as dependencies
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json package-lock.json ./
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
 

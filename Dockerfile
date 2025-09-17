@@ -23,7 +23,7 @@ FROM gcr.io/distroless/nodejs22-debian12:latest
 WORKDIR /app
 
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/generated ./generated
+COPY --from=builder /app/prisma/generated ./generated
 COPY --from=dependencies /app/node_modules ./node_modules
 
 COPY package.json ./

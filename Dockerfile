@@ -1,7 +1,4 @@
 FROM node:20-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
 COPY . /app
 WORKDIR /app
 
@@ -10,7 +7,7 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install
+RUN npm install
 
 FROM base as builder
 WORKDIR /app
@@ -19,8 +16,8 @@ COPY --from=dependencies /app/node_modules ./node_modules
 
 COPY . .
 RUN apt-get update && apt-get install -y openssl
-RUN pnpx prisma generate
-RUN pnpm run build
+RUN npx prisma generate
+RUN npm run build
 
 FROM gcr.io/distroless/nodejs22-debian12:latest
 WORKDIR /app

@@ -1,6 +1,6 @@
 import { Controller, Get, Query, Post, Body } from '@nestjs/common';
 import { SearchService } from './search.service';
-import { SearchDto, DeepResearchDto, SearchProvider } from './dto/search.dto';
+import { SearchDto, DeepResearchDto, SearchProvider, ArticleAnalysis } from './dto/search.dto';
 
 @Controller('search')
 export class SearchController {
@@ -30,4 +30,5 @@ export class SearchController {
             searchTime: searchResult.searchTime
         };
     }
+
 }

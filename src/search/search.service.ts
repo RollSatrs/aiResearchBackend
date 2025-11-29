@@ -62,7 +62,8 @@ export class SearchService {
                 this.searchSemanticScholar(query, limitPerSource),
                 this.searchArxiv(query, limitPerSource),
                 this.searchPubmed(query, limitPerSource),
-                this.searchCrossRef(query, limitPerSource)
+                this.searchCrossRef(query, limitPerSource),
+                this.searchWeb(query, limitPerSource)
             ]);
 
             const allItems: SearchResultItem[] = [];
@@ -425,3 +426,5 @@ export class SearchService {
         };
     }
 }
+
+

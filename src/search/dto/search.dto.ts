@@ -9,7 +9,9 @@ export enum SearchProvider {
     CROSSREF = 'crossref',
     WEB_SEARCH = 'web_search',
     ALL_SOURCES = 'all_sources', // Поиск по всем источникам
-} export class SearchDto {
+}
+
+export class SearchDto {
     @IsString()
     q: string;
 
@@ -80,7 +82,7 @@ export interface DeepResearchResponse {
     bibliography?: CitationItem[];
 }
 
-export interface CitationItem {
+export interface CitationItem{
     id: string;
     title: string;
     authors: string[];
@@ -90,4 +92,12 @@ export interface CitationItem {
     url?: string;
     citationFormat: string; // APA, MLA, etc.
     reliability: 'high' | 'medium' | 'low';
+}
+
+export interface ArticleAnalysis {
+    articleId: string;             // UUID статьи
+    summary: string;               // Резюме статьи
+    annotations: string[];         // Аннотации / цитаты
+    keyWords: string[];            // Ключевые слова
+    citations: CitationItem[]
 }

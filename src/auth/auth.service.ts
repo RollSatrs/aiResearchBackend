@@ -1,17 +1,18 @@
-import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private prisma: PrismaService,
-        private jwtService: JwtService,
+        private readonly prisma: PrismaService,
+        private readonly jwtService: JwtService,
     ) { }
 
     async register(dto: RegisterDto) {
+        try {
         const existingUser = await this.prisma.user.findUnique({
             where: { email: dto.email },
         });
@@ -32,6 +33,9 @@ export class AuthService {
 
         const { password, ...result } = user;
         return result;
+        } catch (error) {
+            throw new InternalServerErrorException('Failed to register user');
+        }
     }
 
     async login(dto: LoginDto) {

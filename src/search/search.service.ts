@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import { SearchDto, SearchResponse, SearchResultItem, SearchProvider } from './dto/search.dto';
 import axios from 'axios';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SearchService {

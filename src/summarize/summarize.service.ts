@@ -1,11 +1,11 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { PrismaService } from '../prisma/prisma.service';
 import { SearchService } from '../search/search.service';
 import { SummarizeDto, SummaryResponse, RelatedPaper } from './dto/summarize.dto';
 import { SearchProvider } from '../search/dto/search.dto';
 import OpenAI from 'openai';
 import * as crypto from 'crypto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SummarizeService {

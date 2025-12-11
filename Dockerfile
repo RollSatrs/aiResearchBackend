@@ -1,30 +1,17 @@
-FROM node:20-slim AS base
-COPY . /app
+FROM node:22 AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 WORKDIR /app
 
-FROM base as dependencies
-WORKDIR /app
+FROM base AS deps
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install  --frozen-lockfile
 
-COPY package.json package-lock.json ./
-
-RUN npm install --legacy-peer-deps
-
-FROM base as builder
-WORKDIR /app
-
-COPY --from=dependencies /app/node_modules ./node_modules
-
+FROM deps AS build
 COPY . .
-RUN apt-get update && apt-get install -y openssl
-RUN npx prisma generate
-RUN npm run build
+RUN pnpx prisma@6.17.1 generate
+RUN pnpm run build
 
-FROM gcr.io/distroless/nodejs22-debian12:latest
-WORKDIR /app
-
-COPY --from=builder /app/dist ./dist
-COPY --from=dependencies /app/node_modules ./node_modules
-
-COPY package.json ./
-
-CMD ["dist/main.js"]
+EXPOSE 3003
+CMD ["pnpm", "start:prod"]
